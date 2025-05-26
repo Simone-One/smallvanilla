@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login/Register</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('hello_world') }}">Home</a></li>
+            <li><a href="{{ url_for('login') }}">Login/Register</a></li>
+            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            <li><a href="{{ url_for('create_post') }}">Create Post</a></li>
+            <li><a href="{{ url_for('account') }}">Account</a></li>
+            <li><a href="{{ url_for('notifications') }}">Notifications</a></li>
+        </ul>
+    </nav>
+    <hr>
+
+    <div class="container">
+        <div id="form-container">
+            <!-- Display Flashed Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <ul class="flashed-messages">
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        <h2>Register</h2>
+        <form id="registrationForm" method="POST" action="{{ url_for('register') }}">
+            <div>
+                <label for="reg-username">Username:</label>
+                <input type="text" id="reg-username" name="username" required>
+            </div>
+            <div>
+                <label for="reg-password">Password:</label>
+                <input type="password" id="reg-password" name="password" required>
+            </div>
+            <div>
+                <button type="submit">Register</button>
+            </div>
+        </form>
+
+        <hr> <!-- Optional: to visually separate the forms -->
+
+        <h2>Login</h2>
+        <form id="loginForm" method="POST" action="{{ url_for('login') }}">
+            <div>
+                <label for="login-username">Username:</label>
+                <input type="text" id="login-username" name="username" required>
+            </div>
+            <div>
+                <label for="login-password">Password:</label>
+                <input type="password" id="login-password" name="password" required>
+            </div>
+            <div>
+                <button type="submit">Login</button>
+            </div>
+        </form>
+    </div>
+    </div>
+
+    <script>
+        function attachFormListeners() {
+            const registrationForm = document.getElementById('registrationForm');
+            const loginForm = document.getElementById('loginForm');
+            const formContainer = document.getElementById('form-container');
+
+            if (registrationForm) {
+                registrationForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    const formData = new URLSearchParams(new FormData(this));
+                    fetch("{{ url_for('register') }}", {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                    })
+                    .then(response => {
+                        if (response.redirected) {
+                            window.location.href = response.url;
+                        } else {
+                            return response.text().then(html => {
+                                // Create a temporary div to parse the new content
+                                const tempDiv = document.createElement('div');
+                                tempDiv.innerHTML = html;
+                                // Replace only the form container's content
+                                const newFormContainerContent = tempDiv.querySelector('#form-container').innerHTML;
+                                formContainer.innerHTML = newFormContainerContent;
+                                attachFormListeners(); // Re-attach listeners to the new forms
+                            });
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+                });
+            }
+
+            if (loginForm) {
+                loginForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    const formData = new URLSearchParams(new FormData(this));
+                    fetch("{{ url_for('login') }}", {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                    })
+                    .then(response => {
+                        if (response.redirected) {
+                            window.location.href = response.url;
+                        } else {
+                             return response.text().then(html => {
+                                const tempDiv = document.createElement('div');
+                                tempDiv.innerHTML = html;
+                                const newFormContainerContent = tempDiv.querySelector('#form-container').innerHTML;
+                                formContainer.innerHTML = newFormContainerContent;
+                                attachFormListeners(); // Re-attach listeners
+                            });
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+                });
+            }
+        }
+
+        // Initial attachment of listeners
+        document.addEventListener('DOMContentLoaded', attachFormListeners);
+    </script>
+</body>
+</html>

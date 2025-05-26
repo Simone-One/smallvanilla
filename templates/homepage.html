@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('hello_world') }}">Home</a></li>
+            <li><a href="{{ url_for('login') }}">Login/Register</a></li>
+            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            <li><a href="{{ url_for('create_post') }}">Create Post</a></li>
+            <li><a href="{{ url_for('account') }}">Account</a></li>
+            <li><a href="{{ url_for('notifications') }}">Notifications</a></li>
+        </ul>
+    </nav>
+    <hr>
+
+    <div class="container">
+        <h1>Posts</h1>
+        <!-- Display Flashed Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="flashed-messages">
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+        <div id="posts-container">
+            <p>Loading posts...</p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const postsContainer = document.getElementById('posts-container');
+
+            fetch("{{ url_for('get_posts') }}")
+                .then(response => response.json())
+                .then(posts => {
+                    postsContainer.innerHTML = ''; // Clear "Loading posts..."
+
+                    if (posts.length === 0) {
+                        const noPostsMessage = document.createElement('p');
+                        noPostsMessage.classList.add('no-posts-message');
+                        noPostsMessage.textContent = 'No posts yet. Be the first to create one!';
+                        postsContainer.appendChild(noPostsMessage);
+                        return;
+                    }
+
+                    posts.forEach(post => {
+                        const postDiv = document.createElement('div');
+                        postDiv.classList.add('post'); // This class will be styled by style.css
+
+                        const authorP = document.createElement('p');
+                        authorP.classList.add('post-author');
+                        // The strong tag for "Author:" will be styled by .post-author strong in style.css
+                        authorP.innerHTML = `<strong>Author:</strong> ${post.author_username}`;
+
+                        const contentP = document.createElement('p');
+                        contentP.classList.add('post-content');
+                        contentP.textContent = post.content;
+
+                        const timestampP = document.createElement('p');
+                        timestampP.classList.add('post-timestamp');
+                        // The small tag is fine, or can be removed if style.css handles font-size
+                        timestampP.innerHTML = `<small>Posted on: ${post.timestamp}</small>`;
+
+                        postDiv.appendChild(authorP);
+                        postDiv.appendChild(contentP);
+                        postDiv.appendChild(timestampP);
+
+                        postsContainer.appendChild(postDiv);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching posts:', error);
+                    const errorMessage = document.createElement('p');
+                    errorMessage.classList.add('error'); // General error styling
+                    errorMessage.textContent = 'Error loading posts. Please try again later.';
+                    postsContainer.innerHTML = ''; // Clear loading message
+                    postsContainer.appendChild(errorMessage);
+                });
+        });
+    </script>
+    </div>
+</body>
+</html>

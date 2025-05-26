@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Post</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('hello_world') }}">Home</a></li>
+            <li><a href="{{ url_for('login') }}">Login/Register</a></li>
+            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            <li><a href="{{ url_for('create_post') }}">Create Post</a></li>
+            <li><a href="{{ url_for('account') }}">Account</a></li>
+            <li><a href="{{ url_for('notifications') }}">Notifications</a></li>
+        </ul>
+    </nav>
+    <hr>
+
+    <div class="container">
+        <!-- Display Flashed Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="flashed-messages">
+            {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <div id="post-form-container">
+        <h2>Create a New Post</h2>
+        <form id="postCreationForm" method="POST" action="{{ url_for('create_post') }}">
+            <div>
+                <label for="content">Content:</label><br>
+                <textarea id="content" name="content" rows="5" cols="40" required></textarea>
+            </div>
+            <div>
+                <button type="submit">Create Post</button>
+            </div>
+        </form>
+        <p><a href="{{ url_for('hello_world') }}">Back to Homepage</a></p>
+    </div>
+    </div>
+
+    <script>
+        function attachPostFormListener() {
+            const postForm = document.getElementById('postCreationForm');
+            const formContainer = document.getElementById('post-form-container');
+
+            if (postForm) {
+                postForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    const formData = new URLSearchParams(new FormData(this));
+                    fetch("{{ url_for('create_post') }}", {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                    })
+                    .then(response => {
+                        if (response.redirected) {
+                            window.location.href = response.url;
+                        } else {
+                            // If not redirected, it means there was an error (e.g. empty content)
+                            // or the user was not logged in and was shown the login page (though that's a redirect too)
+                            // We expect the server to return the postcreate.html page content with error messages.
+                            return response.text().then(html => {
+                                const tempDiv = document.createElement('div');
+                                tempDiv.innerHTML = html;
+                                // Try to find the new form container content
+                                const newFormContainer = tempDiv.querySelector('#post-form-container');
+                                if (newFormContainer) {
+                                    formContainer.innerHTML = newFormContainer.innerHTML;
+                                } else {
+                                    // If the specific container is not found (e.g. redirected to login page content)
+                                    // Replace the whole body, or handle as appropriate.
+                                    // For this case, if it's not a redirect and not the form, it might be an unexpected state.
+                                    // However, the backend logic for create_post should either redirect (login, success)
+                                    // or re-render postcreate.html (validation error).
+                                    document.body.innerHTML = tempDiv.innerHTML; // Fallback, might need refinement
+                                }
+                                attachPostFormListener(); // Re-attach listener to the new form if it was replaced
+                            });
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+                });
+            }
+        }
+
+        // Initial attachment of listener
+        document.addEventListener('DOMContentLoaded', attachPostFormListener);
+    </script>
+</body>
+</html>
