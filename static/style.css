@@ -1,0 +1,156 @@
+/* Global Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Headings */
+h1, h2, h3 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+h1 {
+    font-size: 2em;
+}
+
+h2 {
+    font-size: 1.5em;
+}
+
+/* Navigation */
+nav {
+    background: #333;
+    color: #fff;
+    padding: 10px 0;
+    margin-bottom: 20px;
+}
+
+nav ul {
+    padding: 0;
+    list-style: none;
+    text-align: center;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 20px;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.1em;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+/* Forms */
+form {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #fff;
+    border: 1px solid #ddd;
+}
+
+form div {
+    margin-bottom: 10px;
+}
+
+input[type="text"],
+input[type="password"],
+textarea {
+    width: calc(100% - 22px); /* Adjust for padding and border */
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box; /* So padding doesn't add to width */
+}
+
+textarea {
+    min-height: 100px;
+}
+
+button,
+input[type="submit"] {
+    background-color: #5cb85c;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+button:hover,
+input[type="submit"]:hover {
+    background-color: #4cae4c;
+}
+
+/* Posts */
+.post {
+    border: 1px solid #ddd;
+    margin-bottom: 15px;
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 5px;
+}
+.post-author strong {
+    color: #555;
+}
+.post-content {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+.post-timestamp {
+    font-size: 0.85em;
+    color: #777;
+}
+
+
+/* Flashed Messages */
+.flashes, /* Original class in login.html */
+.flashed-messages /* New consistent class */ {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+}
+
+.flashes li,
+.flashed-messages li {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    color: #fff;
+}
+
+.flashed-messages .error, /* More specific for new class */
+.flashes .error /* For existing class */ {
+    background-color: #d9534f; /* Red for errors */
+}
+
+.flashed-messages .success, /* More specific for new class */
+.flashes .success /* For existing class */ {
+    background-color: #5cb85c; /* Green for success */
+}
+
+/* Utility for no posts message */
+.no-posts-message {
+    color: #777;
+    font-style: italic;
+}
