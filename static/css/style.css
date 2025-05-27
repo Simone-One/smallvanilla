@@ -1,0 +1,160 @@
+/* General Body Styles */
+body {
+    font-family: "Minecraftia", "Courier New", Courier, monospace; /* Assuming Minecraftia is available or fallback */
+    background-color: #3A3A3A; /* Dark gray, like stone */
+    color: #FFFFFF; /* White text */
+    margin: 0;
+    padding: 0;
+}
+
+/* Main container for content */
+.container {
+    max-width: 960px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #525252; /* Slightly lighter gray for content background */
+    border: 3px solid #1E1E1E; /* Darker border, like stone outline */
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+    color: #6EAA2E; /* Minecraft green for headers */
+    border-bottom: 2px solid #4A751D; /* Darker green for underline */
+    padding-bottom: 5px;
+    margin-top: 20px;
+    margin-bottom: 15px;
+}
+
+/* Links */
+a {
+    color: #70B0EA; /* Light blue, like water or sky */
+    text-decoration: none;
+}
+
+a:hover {
+    color: #A0D0F0;
+    text-decoration: underline;
+}
+
+/* Buttons */
+button, input[type="submit"] {
+    background-color: #6EAA2E; /* Green */
+    color: #FFFFFF;
+    border: 2px solid #4A751D; /* Darker green border */
+    padding: 10px 15px;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 2px 2px 0px #3E6018; /* Simple shadow for blocky feel */
+    transition: background-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+button:hover, input[type="submit"]:hover {
+    background-color: #8BC54A;
+    box-shadow: 1px 1px 0px #3E6018;
+    transform: translate(1px, 1px);
+}
+
+button:active, input[type="submit"]:active {
+    background-color: #5A8E24;
+    box-shadow: 0px 0px 0px #3E6018;
+    transform: translate(2px, 2px);
+}
+
+/* Forms */
+input[type="text"], input[type="password"], input[type="email"], textarea {
+    background-color: #C6C6C6; /* Light gray, like sand/gravel */
+    border: 2px solid #8B8B8B; /* Darker gray border */
+    color: #3A3A3A; /* Dark text for readability on light background */
+    padding: 8px;
+    margin-bottom: 10px;
+    width: calc(100% - 20px); /* Full width minus padding and border */
+    box-sizing: border-box;
+}
+
+textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+/* Flash Messages */
+.flashes {
+    list-style: none;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-width: 2px;
+    border-style: solid;
+}
+.flashes .success { background-color: #DFF2BF; color: #4F8A10; border-color: #4F8A10; } /* Greenish */
+.flashes .danger { background-color: #FFBABA; color: #D8000C; border-color: #D8000C; } /* Reddish */
+.flashes .info { background-color: #BDE5F8; color: #00529B; border-color: #00529B; } /* Bluish */
+
+/* Navigation */
+nav {
+    background-color: #4A4A4A; /* Darker gray for nav bar */
+    padding: 10px;
+    border-bottom: 3px solid #1E1E1E;
+    margin-bottom: 20px;
+}
+nav a {
+    color: #FFFFFF;
+    margin-right: 15px;
+    font-weight: bold;
+}
+nav a:hover {
+    color: #70B0EA; /* Light blue on hover */
+}
+
+/* Post styling */
+.post {
+    background-color: #7A7A7A; /* Medium gray, like cobblestone */
+    border: 2px solid #3A3A3A; /* Darker border */
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 3px 3px 0px #2A2A2A; /* Blocky shadow */
+}
+.post header p {
+    margin: 0 0 10px 0;
+}
+.post header small {
+    color: #DADADA;
+}
+.post footer p {
+    margin: 5px 0;
+    font-size: 0.9em;
+}
+
+/* Comments section */
+.comments {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #6A6A6A; /* Separator */
+}
+.comment {
+    background-color: #6A6A6A; /* Slightly darker than post for differentiation */
+    padding: 8px;
+    margin-bottom: 8px;
+    border: 1px solid #4A4A4A;
+}
+.comment small {
+    color: #C0C0C0;
+}
+
+/* General utility for hr */
+hr {
+    border: 0;
+    height: 2px;
+    background-color: #1E1E1E; /* Dark line */
+    margin: 20px 0;
+}
+
+/* Specific page adjustments if needed */
+/* Example: login page might have a more centered form */
+.login-form-container, .register-form-container {
+    max-width: 400px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #525252;
+    border: 3px solid #1E1E1E;
+}

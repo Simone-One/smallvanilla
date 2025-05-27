@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Homepage{% endblock %}
+
+{% block content %}
+  <h1>Homepage</h1>
+
+  <nav>
+    {% if g.user %}
+      <a href="{{ url_for('create_post') }}">Create Post</a> |
+      <a href="{{ url_for('user_profile', username=g.user.username) }}">My Account</a> |
+      <a href="{{ url_for('notifications') }}">Notifications</a> |
+      <a href="{{ url_for('logout') }}">Logout</a>
+    {% else %}
+      <a href="{{ url_for('login') }}">Login</a> |
+      <a href="{{ url_for('register') }}">Register</a>
+    {% endif %}
+  </nav>
+
+  <div id="posts-container">
+    {% if posts %}
+      {% for post in posts %}
+        <article class="post">
+          <header>
+            <p>
+              <strong><a href="{{ url_for('user_profile', username=post.author.username) }}">{{ post.author.username }}</a></strong> 
+              <small>at {{ post.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</small>
+            </p>
+          </header>
+          <p>{{ post.content }}</p>
+          <footer>
+            <p>Likes: {{ post.likes.count() }}</p>
+            <form method="POST" action="{{ url_for('like_post', post_id=post.id) }}" style="display: inline;">
+              <button type="submit">
+                {% set user_liked = False %}
+                {% if g.user %}
+                    {% for like in post.likes %}
+                        {% if like.user_id == g.user.id %}
+                            {% set user_liked = True %}
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                {{ 'Unlike' if user_liked else 'Like' }}
+              </button>
+            </form>
+            
+            <div class="comments">
+              <h4>Comments:</h4>
+              {% for comment in post.comments.order_by(Comment.timestamp.asc()).all() %}
+                <div class="comment">
+                  <p><strong><a href="{{ url_for('user_profile', username=comment.author.username) }}">{{ comment.author.username }}</a>:</strong> {{ comment.content }}</p>
+                  <small>{{ comment.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</small>
+                </div>
+              {% else %}
+                <p>No comments yet.</p>
+              {% endfor %}
+              
+              {% if g.user %}
+              <form method="POST" action="{{ url_for('comment_on_post', post_id=post.id) }}">
+                <div>
+                  <label for="comment_content_{{ post.id }}">Add a comment:</label><br>
+                  <textarea id="comment_content_{{ post.id }}" name="content" rows="2" cols="30" required></textarea>
+                </div>
+                <button type="submit">Comment</button>
+              </form>
+              {% else %}
+              <p><a href="{{ url_for('login') }}">Login</a> to comment.</p>
+              {% endif %}
+            </div>
+          </footer>
+        </article>
+        <hr>
+      {% endfor %}
+    {% else %}
+      <p>No posts yet. Be the first to <a href="{{ url_for('create_post') }}">create one</a>!</p>
+    {% endif %}
+  </div>
+{% endblock %}
